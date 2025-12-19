@@ -1,0 +1,313 @@
+{% extends "superadmin/base.html" %}
+{% load static %}
+{% block title %} Counsellor Dashboard {% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/administrator.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= SIDEBAR ================= -->
+<div class="sidebar">
+    <h4>Welcome {{ Trainer }}</h4>
+    <h4>Counsellor</h4>
+
+    <!-- Add Student -->
+    <a href="{% url 'enquiryForm' %}" class="role-btn btn btn-primary mt-2">
+        Add Students
+    </a>
+
+    {% comment %} <!-- Recent Enquiry -->
+    <a href="{% url 'counsellerDashboard' %}?open=recent" class="role-btn btn btn-primary mt-2">
+        Recent Enquiries 
+        <span class="badge bg-danger">{{ unread_count }}</span>
+    </a> {% endcomment %}
+
+    <button class="role-btn btn btn-primary mt-2"
+        data-bs-toggle="collapse"
+        data-bs-target="#panel_recentEnquiry">
+    Recent Enquiries 
+    <span class="badge bg-danger">{{ unread_count }}</span>
+</button>
+
+
+    {% comment %} <!-- Student Enquiry -->
+    <a href="{% url 'counsellor_pannel_student_enquiry' %}?open=student" class="role-btn btn btn-primary mt-2">
+        Student Enquiries
+    </a> {% endcomment %}
+    <button class="role-btn btn btn-primary mt-2"
+        data-bs-toggle="collapse" 
+        data-bs-target="#panel_studentEnquiryTable">
+        Student Enquiries
+    </button>
+
+
+    <!-- Log Out -->
+    <a href="{% url 'stafflogin' %}" class="role-btn btn btn-primary mt-2">Log Out</a>
+</div>
+
+<!-- ================= MAIN CONTENT ================= -->
+<div class="content-area">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- ================= ACCORDION ================= -->
+<div class="accordion" id="adminAccordion">
+
+    {% comment %} <!-- ================= RECENT ENQUIRY PANEL ================= -->
+    <div class="accordion-item">
+        <div id="RecentEnquiryPanel"
+             class="accordion-collapse collapse {% if recent_enquiry %}show{% endif %}"
+             data-bs-parent="#adminAccordion">
+
+            {% if recent_enquiry %}
+            <div class="card shadow mt-4 border-0" style="margin-left:280px;">
+                <div class="card-header bg-danger text-white fw-bold">Recent Enquiry Table</div>
+
+                <div class="card-body">
+
+                    {% if data %}
+                    <div class="table-responsive"
+                         style="max-width:1190px; max-height:400px; overflow-y:auto; white-space:nowrap;">
+
+                        <table class="table table-striped table-hover align-middle">
+                            <thead class="table-danger">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Enquiry Course</th>
+                                    <th>Meeting Status</th>
+                                    <th>Action</th>
+                                    <th>Delete</th>
+                                    <th>Add Remark</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for user in data %}
+                                <tr>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.course }}</td>
+
+                                    <td class="text-center">
+                                        {% if user.directors_meeting %}
+                                            <span class="badge bg-success">Yes</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">No</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="text-center">
+                                        {% if user.directors_meeting %}
+                                            <a href="{% url 'deactivate_student_enquiry' user.id %}" class="btn btn-danger">No</a>
+                                        {% else %}
+                                            <a href="{% url 'activate_student_enquiry' user.id %}" class="btn btn-success">Yes</a>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <a href="{% url 'Delete_student_enquiry' user.id %}"
+                                           onclick="return confirm('Are you sure you want to delete ?');"
+                                           class="btn btn-sm btn-danger">Delete</a>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <button class="btn btn-primary btn-sm" onclick="toggleRemarkForm({{ user.id }})">
+                                            Add Remark
+                                        </button>
+
+                                        <form id="remarkForm{{ user.id }}"
+                                              method="POST" action="{% url 'add_remark' user.id %}"
+                                              style="display:none; margin-top:8px;">
+                                            {% csrf_token %}
+                                            <textarea name="remark" rows="2" class="form-control">{{ user.remark }}</textarea>
+                                            <button type="submit" class="btn btn-success btn-sm mt-2">Save</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div> {% endcomment %}
+
+    <!-- ================= RECENT ENQUIRY PANEL ================= -->
+    <div class="accordion-item">
+        {% comment %} <div id="panel_recentEnquiry"
+             class="accordion-collapse collapse {% if request.GET.open == 'recent' %}show{% endif %}"
+             data-bs-parent="#adminAccordion"> {% endcomment %}
+             <div id="panel_recentEnquiry"
+         class="accordion-collapse collapse {% if request.GET.open == 'recent' %}show{% endif %}"
+         data-bs-parent="#adminAccordion">
+
+            {% comment %} {% if recent_enquiry %} {% endcomment %}
+            <div class="mt-4" style="margin-left:280px;">
+                {% include "shared/student_recent_enquiry_table.html" %}
+            </div>
+            {% comment %} {% endif %} {% endcomment %}
+
+        </div>
+    </div>
+
+    {% comment %} <!-- ================= STUDENT ENQUIRY PANEL ================= -->
+    <div class="accordion-item">
+        <div id="StudentEnquiryPanel"
+             class="accordion-collapse collapse {% if show_student_enquiry %}show{% endif %}"
+             data-bs-parent="#adminAccordion">
+
+            {% if show_student_enquiry %}
+            <div class="card shadow mt-4 border-0" style="margin-left:280px;">
+                <div class="card-header bg-danger text-white fw-bold">Student Enquiry Table</div>
+
+                <div class="card-body">
+
+                    <div class="table-responsive"
+                         style="max-width:1190px; max-height:400px; overflow-y:auto; white-space:nowrap;">
+
+                        <table class="table table-striped table-hover align-middle">
+                            <thead class="table-danger">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Father's Name</th>
+                                    <th>DOB</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Number</th>
+                                    <th>Country</th>
+                                    <th>State</th>
+                                    <th>City</th>
+                                    <th>Address</th>
+                                    <th>Pincode</th>
+                                    <th>Education</th>
+                                    <th>School</th>
+                                    <th>University</th>
+                                    <th>College</th>
+                                    <th>Status</th>
+                                    <th>Course</th>
+                                    <th>Aadhar</th>
+                                    <th>Pan</th>
+                                    <th>Meeting</th>
+                                    <th>Action</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for user in data %}
+                                <tr>
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.father_name }}</td>
+                                    <td>{{ user.dob }}</td>
+                                    <td>{{ user.gender }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.number }}</td>
+                                    <td>{{ user.country }}</td>
+                                    <td>{{ user.state }}</td>
+                                    <td>{{ user.city }}</td>
+                                    <td>{{ user.address }}</td>
+                                    <td>{{ user.pincode }}</td>
+                                    <td>{{ user.education }}</td>
+                                    <td>{{ user.school }}</td>
+                                    <td>{{ user.university }}</td>
+                                    <td>{{ user.collage }}</td>
+                                    <td>{{ user.status }}</td>
+                                    <td>{{ user.course }}</td>
+
+                                    <td>
+                                        {% if user.aadhar %}
+                                            <img src="{{ user.aadhar.url }}" width="60" height="60">
+                                        {% else %}
+                                            No Image
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if user.pan %}
+                                            <img src="{{ user.pan.url }}" width="60" height="60">
+                                        {% else %}
+                                            No Image
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="text-center">
+                                        {% if user.director_meeting %}
+                                            <span class="badge bg-success">Yes</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">No</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="text-center">
+                                        {% if user.director_meeting %}
+                                            <a href="{% url 'deactivate_student_enquiry' user.id %}"
+                                               class="btn btn-danger btn-sm">No</a>
+                                        {% else %}
+                                            <a href="{% url 'activate_student_enquiry' user.id %}"
+                                               class="btn btn-success btn-sm">Yes</a>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <a href="{% url 'Delete_student_enquiry' user.id %}"
+                                           onclick="return confirm('Are you sure you want to delete ?');"
+                                           class="btn btn-sm btn-danger">Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div> {% endcomment %}
+    <!-- ================= STUDENT ENQUIRY PANEL ================= -->
+    <div class="accordion-item">
+        {% comment %} <div id="panel_studentEnquiryTable"
+             class="accordion-collapse collapse {% if request.GET.open == 'student' %}show{% endif %}"
+             data-bs-parent="#adminAccordion"> {% endcomment %}
+            <div id="panel_studentEnquiryTable"
+            class="accordion-collapse collapse {% if request.GET.open == 'student' %}show{% endif %}" data-bs-parent="#adminAccordion">
+
+
+            {% comment %} {% if show_student_enquiry %} {% endcomment %}
+            <div class="mt-4" style="margin-left:280px;">
+                {% include "shared/student_enquiry_table.html" %}
+            </div>
+            {% comment %} {% endif %} {% endcomment %}
+ 
+        </div>  
+    </div>
+
+</div> <!-- END ACCORDION -->
+
+<script>
+function toggleRemarkForm(id) {
+    let form = document.getElementById("remarkForm" + id);
+    form.style.display = (form.style.display === "none") ? "block" : "none";
+}
+</script>
+
+{% endblock %}

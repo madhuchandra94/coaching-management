@@ -1,0 +1,146 @@
+{% extends "superadmin/base.html" %}
+ {% load static %}
+{% block title %} Staff/ Employees Record {% endblock %}
+
+{% block extra_css %}
+<!--Custom Css File -->
+<link rel="stylesheet" href="{% static 'css/staffRecord.css'%}">
+{% endblock %}  
+
+{% block heading %}
+  <h1> Programmers Point Solution</h1>
+
+  <!--main logo -->
+  <img id = "logo" src ="{% static 'images/programmers-logo.png' %}" alt="Company Logo">
+{% endblock %}
+
+{% block content %}
+<!-- Main Container-->
+
+<!--  Only show the table if there is employee data -->
+{% if employees %}
+  <div class="table-responsive">
+    <h2 class="mb-3">Employee Details</h2>
+    <table class='table table-bordered table-striped table-hover align-middle text-center shadow-sm'>
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Father/Husband Name</th>
+          <th>Date of Birth</th>
+          <th>Gender</th>
+          <th>Designation</th>
+          <th>Email Id</th>
+          <th>Mobile Number</th>
+          <th>Address</th>
+          <th>Country</th>
+          <th>State</th>
+          <th>City</th>
+          <th>PinCode</th>
+          <th>Highest Qulification</th>
+          <th>Specialization</th>
+          <th>Passing Year</th>
+          <th>College/Univercity</th>
+          <th>Percentage/CGPA</th>
+          <th>Work Status</th>
+          <th>Company Name</th>
+          <th>Job Title</th>
+          <th>Total Experience</th>
+          <th>Notice Period</th>
+          <th>Salary</th>
+          <th>Salary Slip</th>
+          <th>Adhar</th>
+          <th>Pan</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rec in employees %}
+          <tr>
+            <!--  Personal Info -->
+            <td>{{rec.name}}</td>
+            <td>{{rec.f_h}}</td>
+            <td>{{rec.dob}}</td>
+            <td>{{rec.gender}}</td>
+
+            <!-- Designation / Role -->
+            <td>{{rec.role}}</td>
+            
+            <!--Contact Details-->
+            <td>{{rec.email}}</td>
+            <td>{{rec.mobile}}</td>
+            <td>{{rec.address}}</td>
+
+            <!--  Location Data -->
+            <td>{{rec.country}}</td>
+            <td>{{rec.state}}</td>
+            <td>{{rec.city}}</td>
+            <td>{{rec.pin}}</td>
+            
+            <!--Educational Details-->
+            <td>{{rec.highest_qualification}}</td>
+            <td>{{rec.specialization}}</td>
+            <td>{{rec.passing_year}}</td>
+            <td>{{rec.college}}</td>
+            <td>{{rec.percentage}}</td>
+
+            <!-- Professional Details-->
+             <td>{{rec.work_status}}</td>
+             <td>{{rec.company_name}}</td>
+             <td>{{rec.job_title}}</td>
+             <td>{{rec.total_experience}}</td>
+             <td>{{rec.notice_period}}</td>
+             <td>{{rec.salary}}</td>
+            
+            <!-- Salary Slip -->
+            <td>
+              {% if rec.salary_slip %}
+                <img src="{{rec.salary_slip.url}}" width="80" class="img-thumbnail" rounded alt="Salary Slip">
+              {% else %}
+                <span class="text-muted">No Salary Slip </span>
+              {% endif %}
+             </td>
+            
+             <!-- Adhar Image -->
+            <td>
+              {% if rec.adhar %}
+              <img src="{{rec.adhar.url}}" width="80" class="img-thumbnail" rounded alt="Aadhar Card">
+              {% else %}
+                <span class="text-muted">No Adhar Found</span>
+              {% endif %}
+            </td>
+
+            <!-- PAN IMAGE-->
+            <td>
+              {% if rec.pan %}
+                <img src="{{rec.pan.url}}" width="80" class="img-thumbnail" rounded alt="PAN Card">
+              {% else %}
+                  <span class="text-muted">No Pan Found</span>
+              {% endif %}
+            </td>
+            
+            <!-- Status -->
+            <td>
+                {% if rec.is_active %}
+                    <span class="badge bg-success">Active</span>
+                {% else %}
+                    <span class="badge bg-danger">Inactive</span>
+                {% endif %}
+            </td>
+            <!-- Active or Deactive employee -->
+            <td>
+                <a href="{% url 'toggleEmployee' rec.id %}" class="btn btn-sm  
+                    {% if rec.is_active %}btn-danger{% else %}btn-success{% endif %}">
+                    {% if rec.is_active %} Deactivate {% else %} Activate {% endif %}
+                </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>  
+  </div>
+  {% else %}
+  <!--IF No Employees Found -->
+  <div class="alert alert-warning text-center mt-4">
+    No Employee Record Found.
+  </div>
+{% endif %}
+{% endblock %}

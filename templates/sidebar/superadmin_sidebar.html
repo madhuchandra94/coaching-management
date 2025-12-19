@@ -1,0 +1,172 @@
+{% comment %} <div id="sidebar_div">
+    <!-- Profile Header -->
+<div class="sidebar-profile text-center">
+    <div class="profile-img-wrapper">
+        <img src="https://i.pravatar.cc/150?img=12" alt="Profile Image" class="profile-img">
+    </div>
+    <h3 class="profile-name">Gourav Agrawal</h3>
+</div>
+
+<button class="side-btn" onclick="openPanel('roleSection')">
+    <i class="fa-solid fa-user-shield"></i> Roles
+</button>
+
+<button class="side-btn" onclick="openPanel('course')">
+    <i class="fa-solid fa-book"></i> Course
+</button>
+
+<button class="side-btn" onclick="openPanel('addClass')">
+    <i class="fa-solid fa-plus"></i> Add Class
+</button>
+
+<button class="side-btn" onclick="openPanel('classDetails')">
+    <i class="fa-solid fa-table"></i> Class Details
+</button>
+
+<button class="side-btn" onclick="openPanel('staffReg')">
+    <i class="fa-solid fa-user-plus"></i> Staff Registration
+</button>
+
+<button class="side-btn" onclick="openPanel('empDetails')">
+    <i class="fa-solid fa-users"></i> Emp Details
+</button>
+
+<button class="side-btn" onclick="openPanel('enquiryForm')">
+    <i class="fa-solid fa-file-pen"></i> Enquiry Form
+</button>
+
+<button class="side-btn" onclick="openPanel('recentEnquiry')">
+    <i class="fa-solid fa-clock"></i> Recent Enquiry
+</button>
+
+<button class="side-btn" onclick="openPanel('enquiryTable')">
+    <i class="fa-solid fa-database" ></i> Enquiry Table
+</button>
+
+</div> {% endcomment %}
+
+
+
+{% comment %} 
+<div id="sidebar_div">
+
+    <div class="sidebar-profile text-center">
+        <div class="profile-img-wrapper">
+            <img src="https://i.pravatar.cc/150?img=12" alt="Profile Image" class="profile-img">
+        </div>
+        <h3 class="profile-name">Gourav Agrawal</h3>
+    </div>
+
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_roles" onclick="openPanel('panel_roles')">
+        <i class="fa-solid fa-user-shield"></i> Roles
+    </button> 
+
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_roles">
+        <i class="fa-solid fa-user-shield"></i> Roles
+    </button>
+    
+    <button class="side-btn" onclick="openPanel('panel_course')">
+        <i class="fa-solid fa-book"></i> Course
+    </button>
+
+    <button class="side-btn" onclick="openPanel('panel_addClass')">
+        <i class="fa-solid fa-plus"></i> Add Class
+    </button>
+
+    <button class="side-btn" onclick="openPanel('panel_classDetails')">
+        <i class="fa-solid fa-table"></i> Class Details
+    </button>
+
+    <button class="side-btn" onclick="openPanel('panel_staffReg')">
+        <i class="fa-solid fa-user-plus"></i> Staff Registration
+    </button>
+
+    <button class="side-btn" onclick="openPanel('panel_empDetails')">
+        <i class="fa-solid fa-users"></i> Emp Details
+    </button>
+
+    <button class="side-btn" onclick="openPanel('panel_enquiryForm')">
+        <i class="fa-solid fa-file-pen"></i> Enquiry Form
+    </button>
+
+    <button class="side-btn" onclick="openPanel('panel_recentEnquiry')">
+        <i class="fa-solid fa-clock"></i> Recent Enquiry
+    </button>
+
+    <button class="side-btn" onclick="openPanel('panel_enquiryTable')">
+        <i class="fa-solid fa-database"></i> Enquiry Table
+    </button>
+
+</div>
+{% endcomment %}
+
+<div id="sidebar_div">
+    <!-- Side bar Profile Picture and Name of the Entity -->
+    <div class="sidebar-profile text-center">
+        <div class="profile-img-wrapper">
+            <img src="https://i.pravatar.cc/150?img=12" alt="Profile Image" class="profile-img">
+        </div>
+        <h3 class="profile-name">Director</h3>
+    </div>
+
+    <!-- Admin Role Button -->
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_roles">
+        <i class="fa-solid fa-user-shield"></i> Employee Roles
+    </button>
+
+    <!-- Admin Employee Details Button -->
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_empDetails">
+        <i class="fa-solid fa-users"></i> Employee Details
+    </button>
+    
+   <!-- Admin Add Employee Button -->
+    <a href="{% url 'staffRegistration' %}" class="side-btn side-btn-link">
+        <i class="fa-solid fa-plus"></i> Add Employee
+    </a>
+
+
+    <!-- Admin Courses Button -->
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_course">
+        <i class="fa-solid fa-book"></i> Courses
+    </button>
+
+    
+    <!-- Admin Student Enquiry Form -->
+    <a href="{% url 'enquiryForm' %}" class="side-btn side-btn-link">
+        <i class="fa-solid fa-file-pen"></i> Student Enquiry Form
+    </a>
+{% comment %} 
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_enquiryForm">
+        <i class="fa-solid fa-file-pen"></i> Student Enquiry Form
+    </button> {% endcomment %}
+    
+    
+    {% comment %} <!-- Admin Recent Student Enquiry Table Button -->
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_recent_student_Enquiry_table">
+        <i class="fa-solid fa-clock"></i> Recent Enquiry
+    </button>
+    
+    <!-- Admin Student Enquiry Table Button -->
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_studentEnquiryTable">
+        <i class="fa-solid fa-database"></i> Student Enquiry Table
+    </button> {% endcomment %}
+
+    <!-- Admin Recent Student Enquiry Table Button -->
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_recent_student_Enquiry_table">
+        <i class="fa-solid fa-clock"></i> Recent Enquiry<span class="badge rounded pill bg-danger ms-auto">{{unread_count}}</span>
+    </button>
+    
+    <!-- Admin Student Enquiry Table Button -->
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_studentEnquiryTable">
+        <i class="fa-solid fa-database"></i> Student Enquiry Table
+    </button>
+
+    
+    <!-- Admin Class Details Button-->
+    <button class="side-btn" data-bs-toggle="collapse" data-bs-target="#panel_classDetails">
+        <i class="fa-solid fa-table"></i> Class Details
+    </button>
+    
+    
+</div>
+

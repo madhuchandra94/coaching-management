@@ -1,0 +1,284 @@
+/* *
+{
+    margin:0px;
+    padding:0px;
+}  */
+/* body
+{
+    background-color:aliceblue;
+            
+}
+h1
+{
+    color:brown;
+    font-family: sans-serif;
+    text-align: center;
+}
+#logo
+{
+    height:30%;
+    width: 30%;
+    position: relative;
+    left : 35%;
+}
+#main-container
+{
+    height: 80%;
+    width: 70%;
+    margin-left:20%;
+    margin-top:1%;
+    background-color: #fbfafa;
+}
+input
+{
+    margin-top:5px;
+}
+label
+{
+    margin-top:15px;
+}
+#button
+{
+    margin-left: 100px;
+}
+
+h2
+{   
+    color:chocolate;
+    text-align: center;
+
+} */
+
+/* ============================================ */
+/* 
+body {
+      background: linear-gradient(115deg, #e8ecf3 55%, #e9f3fa 100%);
+      min-height: 100vh;
+    }
+    .outer-wrap {
+      padding-top: 60px;
+      min-height: 100vh;
+    }
+    .pro-logo-pill {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 72px;
+      margin-bottom: -38px;
+      z-index: 5;
+      position: relative;
+    }
+    .pro-logo-pill-inner {
+      background: #f5faff;
+      border-radius: 40px;
+      padding: 8px 38px;
+      box-shadow: 0 8px 28px rgba(69,98,168,0.12), 0 2px 7px #cbd5e1;
+      display: flex; align-items: center; gap: 15px;
+    }
+    .pro-logo-pill img {
+      height: 56px;
+      border-radius: 24px;
+      background: #e9f4fa;
+      box-shadow: 0 1px 4px #aac5d9;
+      margin-right: 6px;
+    }
+    .pro-logo-title {
+      font-size: 1.4rem;
+      color: #334e6f;
+      font-weight: 800;
+      letter-spacing: .03em;
+      font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    }
+    .main-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 56px rgba(54,62,120,.11), 0 4px 20px #d7e5f180;
+      max-width: 960px;
+      margin: 0 auto;
+      margin-bottom: 30px;
+      border: none;
+      padding-top: 18px;
+    }
+    .section-title-bar {
+      color: #335894;
+      font-weight: 700;
+      font-size: 1.09rem;
+      letter-spacing: .02em;
+      margin-top: 32px;
+      margin-bottom:16px;
+      border-left: 5px solid #048be1;
+      background: #f1f4f7;
+      padding: 9px 18px 8px 16px;
+      border-radius: 7px;
+      display: flex;align-items:center;gap:8px;
+    }
+    .section-title-bar i { color: #048be1; font-size:1.18rem; }
+    .form-label { color: #2e425b; font-weight: 500; }
+    .form-select, .form-control {
+      border-radius: 9px;
+      border: 1.3px solid #e3eaf6;
+      background: #f9fbfe;
+      color: #223146;
+      font-size: 1.01rem;
+      font-weight: 500;
+      transition: border .18s;
+    }
+    .form-select:focus, .form-control:focus {
+      border-color: #048be1;
+      background: #fff;
+      color: #223146;
+      box-shadow: 0 0 0 2px #b7dcfc44;
+    }
+    .form-check-input {
+      border-radius: 50%;
+      width: 1.31em; height: 1.31em;
+      border: 2px solid #b5d3ef; background: #ecf1fb;
+      transition: border .13s;
+    }
+    .form-check-input:checked { background-color: #048be1; border-color: #2777b8;}
+    .form-check-label { padding-left:5px; margin-right:8px;color:#495e71;}
+    .form-text { color: #4d7298;}
+    .step-hide { display: none; }
+    .btn-main {
+      background: linear-gradient(92deg, #048be1 70%, #3049a5 100%);
+      border-radius: 16px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.15rem;
+      padding: 10px 0;
+      letter-spacing: 1px;
+      box-shadow: 0 8px 26px -9px #7bc1fb;
+      border: none;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .btn-main:hover, .btn-main:focus {
+      background: linear-gradient(91deg, #2257ad 60%, #048be1 100%);
+      color: #fff;
+      box-shadow: 0 13px 46px -8px #7ebdf5;
+    }
+    @media (max-width: 575px) {
+      .main-card {padding:0 4px;}
+      .pro-logo-pill-inner {padding: 5px 13px;}
+      .pro-logo-pill img {height:38px;}
+      .pro-logo-title {font-size:1rem;}
+    } */
+
+    /* ======================================== */
+    body {
+  background: linear-gradient(115deg, #e8ecf3 55%, #e9f3fa 100%);
+  min-height: 100vh;
+}
+.outer-wrap {
+  padding: 60px 0 30px 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pro-logo-pill {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 72px;
+  margin-bottom: -18px; /* Adjust for overlap */
+  z-index: 5;
+  position: relative;
+}
+.pro-logo-pill-inner {
+  background: #f5faff;
+  border-radius: 40px;
+  padding: 8px 38px;
+  box-shadow: 0 8px 28px rgba(69,98,168,0.12), 0 2px 7px #cbd5e1;
+  display: flex; align-items: center; gap: 15px;
+}
+.pro-logo-pill img {
+  height: 56px;
+  border-radius: 24px;
+  background: #e9f4fa;
+  box-shadow: 0 1px 4px #aac5d9;
+  margin-right: 6px;
+}
+.pro-logo-title {
+  font-size: 1.4rem;
+  color: #334e6f;
+  font-weight: 800;
+  letter-spacing: .03em;
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+}
+.main-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 56px rgba(54,62,120,.11), 0 4px 20px #d7e5f180;
+  max-width: 800px;
+  margin: 0 auto 30px auto;
+  border: none;
+  padding: 40px 32px 24px 32px;
+}
+.section-title-bar {
+  color: #335894;
+  font-weight: 700;
+  font-size: 1.09rem;
+  letter-spacing: .02em;
+  margin-top: 36px;
+  margin-bottom:16px;
+  border-left: 5px solid #048be1;
+  background: #f1f4f7;
+  padding: 9px 18px 8px 16px;
+  border-radius: 7px;
+  display: flex;align-items:center;gap:8px;
+}
+.section-title-bar:first-child {
+  margin-top: 0;
+}
+.section-title-bar i { color: #048be1; font-size:1.18rem; }
+.form-label { color: #2e425b; font-weight: 500; }
+.form-select, .form-control {
+  border-radius: 9px;
+  border: 1.3px solid #e3eaf6;
+  background: #f9fbfe;
+  color: #223146;
+  font-size: 1.01rem;
+  font-weight: 500;
+  transition: border .18s;
+}
+.form-select:focus, .form-control:focus {
+  border-color: #048be1;
+  background: #fff;
+  color: #223146;
+  box-shadow: 0 0 0 2px #b7dcfc44;
+}
+.form-check-input {
+  border-radius: 50%;
+  width: 1.31em; height: 1.31em;
+  border: 2px solid #b5d3ef; background: #ecf1fb;
+  transition: border .13s;
+}
+.form-check-input:checked { background-color: #048be1; border-color: #2777b8;}
+.form-check-label { padding-left:5px; margin-right:8px;color:#495e71;}
+.form-text { color: #4d7298;}
+.step-hide { display: none; }
+.btn-main, .btn-primary {
+  background: linear-gradient(92deg, #048be1 70%, #3049a5 100%);
+  border-radius: 16px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding: 10px 0;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 26px -9px #7bc1fb;
+  border: none;
+  margin-top: 24px;
+  margin-bottom: 18px;
+}
+.btn-main:hover, .btn-main:focus, .btn-primary:hover, .btn-primary:focus {
+  background: linear-gradient(91deg, #2257ad 60%, #048be1 100%);
+  color: #fff;
+  box-shadow: 0 13px 46px -8px #7ebdf5;
+}
+@media (max-width: 575px) {
+  .main-card {padding:18px 4px;}
+  .pro-logo-pill-inner {padding: 5px 13px;}
+  .pro-logo-pill img {height:38px;}
+  .pro-logo-title {font-size:1rem;}
+}

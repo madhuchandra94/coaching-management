@@ -1,0 +1,43 @@
+*
+{
+    margin:0px;
+    padding:0px;
+}
+body
+{
+    background-color:aliceblue;
+            
+}
+h1
+{
+    color:brown;
+    font-family: sans-serif;
+    text-align: center;
+}
+#logo
+{
+    height:30%;
+    width: 30%;
+    position: relative;
+    left : 35%;
+}
+#main-container
+{
+    height: 80%;
+    width: 70%;
+    margin-left:20%;
+    margin-top:1%;
+    background-color: #fbfafa;
+}
+input
+{
+    margin-top:5px;
+}
+label
+{
+    margin-top:15px;
+}
+#button
+{
+    margin-left: 100px;
+}

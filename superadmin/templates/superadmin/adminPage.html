@@ -1,0 +1,658 @@
+{% extends "home/base_page.html" %}
+{% load static %}
+
+{% block title %} Admin Page {% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock extra_css %}
+
+{% block heading %} 
+    <h3 class="text-center mt-3">Programmers Point Solution</h3>
+{% endblock heading %}
+
+{% block sidebar %}
+    {% include "sidebar/superadmin_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+
+{% comment %} <!-- Sidebar -->
+<div class="sidebar">
+    <h4>Gourav Agrawal</h4>
+    <h4>Director</h4>
+
+    <!-- Buttons that toggle sections on the SAME page -->
+    <button class="role-btn btn btn-primary mt-2" data-bs-toggle="collapse" data-bs-target="#roleSection" aria-controls="roleSection">
+        Role
+    </button>
+
+    <!-- IMPORTANT: remove href to avoid navigation; just toggle the collapse -->
+    <button class="role-btn btn btn-primary mt-2" data-bs-toggle="collapse" data-bs-target="#employeetable" aria-controls="employeetable">
+        Employee Details
+    </button>
+
+     <!-- Add Employee Details -->
+    <a href="{% url 'staffRegistration'%}" class="role-btn btn btn-primary mt-2">Add Employee</a> 
+    
+    {% comment %} <!-- Course button to add the course -->
+    <button class="role-btn btn btn-primary mt-2" data-bs-toggle="collapse" data-bs-target="#courseSection" aria-controls="courseSection">
+        Courses
+    </button>
+
+    <!-- Enquiry Table inside Admin Accordion -->
+    <a href="#" class="role-btn btn btn-primary mt-2" data-bs-toggle="collapse" data-bs-target="#EnquiryTable"aria-controls="EnquiryTable">Student Enquiry Table</a>
+
+    <!-- Log Out -->
+    <a href="{% url 'logOut' %}" class="role-btn btn btn-primary mt-2">Log Out</a>
+</div>  {% endcomment %}
+
+
+<!-- Main Content Area -->
+<div class="content-area" id="content-area">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- ACCORDION: ensures only ONE section is open at a time -->
+    {% comment %} <div class="accordion" id="adminAccordion"> {% endcomment %}
+
+        <!-- ROLE SECTION -->
+        {% comment %} <div id="roleSection" class="panel" active> {% endcomment %}
+        {% comment %} <div class="accordion-item border-0"> {% endcomment %}
+            {% comment %} <h2 class="accordion-header d-none" id="headingRole"></h2> {% endcomment %}
+            {% comment %} <div id="roleSection" autofocus class="accordion-collapse collapse" data-bs-parent="#adminAccordion"> {% endcomment %}
+                {% comment %} <div class="accordion-body p-0"> {% endcomment %}
+            {% comment %} <div id="panel_roles" class="panel">
+                <h3 class="mb-3">Roles</h3> {% endcomment %}
+        
+     <!-- ACCORDION -->
+    <div class="accordion" id="adminAccordion">
+
+        <!-- ================= ROLE PANEL ================= -->
+        <div class="accordion-item border-0">
+            <h2 class="accordion-header d-none"></h2>
+
+            <div id="panel_roles"
+                 class="accordion-collapse collapse {% if request.GET.open == 'roles' %}show{% endif %}"
+                 data-bs-parent="#adminAccordion">
+
+                <div class="accordion-body p-0">
+
+                    <!-- Add Role Form -->
+                    <div class="card p-4 mb-4">
+                        <h5 class="mb-3">Add New Role</h5>
+                        <form method="POST" action="{% url 'CreateRole' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="add-role" name="role" placeholder="Enter role name" value="{{instance.role}}" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Add Role</button>
+                        </form>
+                    </div>
+
+                    <!-- Role Table -->
+                    <div id="roleTableContainer" class="card p-4 mt-4">
+                        <h5 class="mb-3">Role Data</h5>
+                        <p class="text-muted">Total records: {{ data|length }}</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Role</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for rec in data %}
+                                        <tr>
+                                            <td>{{ rec.role }}</td>
+                                            <td class="text-center">
+                                                <!-- Edit in-row collapse -->
+                                                <button class="btn btn-warning btn-sm" data-bs-toggle="collapse" data-bs-target="#updateRoleForm{{ rec.id }}">
+                                                    <i class="fa-solid fa-user-pen"></i>
+                                                </button>
+                                                <a href="{% url 'delete' rec.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete ?');">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Hidden Update Form Row -->
+                                        <tr class="collapse" id="updateRoleForm{{ rec.id }}">
+                                            <td colspan="2">
+                                                <form method="POST" action="{% url 'update' rec.id %}">
+                                                    {% csrf_token %}
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="role" value="{{ rec.role }}">
+                                                        <button type="submit" class="btn btn-success">Update</button>
+                                                    </div>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="2" class="text-center">No Records Available</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>  
+
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- EMPLOYEE SECTION -->
+        {% comment %} <div class="accordion-item border-0">
+            <h2 class="accordion-header d-none" id="headingEmployee"></h2>
+            <div id="employeetable" class="accordion-collapse collapse {% if request.GET.show_employee %}show{% endif %}" data-bs-parent="#adminAccordion">
+                <div class="accordion-body p-0"> {% endcomment %}
+        <!-- ================= EMPLOYEE PANEL NEW ================= -->
+        <div class="accordion-item border-0">
+            <h2 class="accordion-header d-none"></h2>
+        
+            <div id="panel_empDetails" class="accordion-collapse collapse {% if request.GET.open == 'employees' %}show{% endif %}"
+                 data-bs-parent="#adminAccordion">
+        
+                <div class="accordion-body p-0">
+
+                    {% comment %} <!-- Search Bar for Searching Employee -->
+                    <nav class="navbar bg-body-tertiary">
+                      <div class="container-fluid">
+                        <form method='get' action="{% url 'searchEmployee' %}" class="d-flex" role = "search" >
+                          <input type="search" name="q" placeholder='Search by username, email or city' aria-label = "Search"  id="search_bar" class="form-control me-2" value="{{ request.GET.q }}">
+                          <input type="hidden" name="show_employee" value="1">
+                          <button type="submit" id="search_btn" class="btn btn-outline-success">Search Employee</button>
+                        </form>
+                      </div>
+                    </nav>
+                     {% endcomment %}
+                    
+                    <!-- Search Bar for Searching Employee as NEW APPROACH -->
+                    <nav class="navbar bg-body-tertiary">
+                      <div class="container-fluid">
+                    
+                        <form method="get" action="{% url 'searchEmployee' %}" class="d-flex" role="search">
+                        
+                          <input type="search" name="q" placeholder="Search by username, email or city" aria-label="Search"
+                                id="search_bar" class="form-control me-2" value="{{ request.GET.q }}">
+                        
+                          <!-- THIS LINE ENSURES EMPLOYEE PANEL OPENS AFTER SEARCH -->
+                          <input type="hidden" name="open" value="employees">
+                        
+                          <button type="submit" id="search_btn" class="btn btn-outline-success">
+                            Search Employee
+                          </button>
+                      
+                        </form>
+                    
+                      </div>
+                    </nav>
+
+
+
+                    <!-- Add Employee Button -->
+                    <div class="text-end mb-2">
+                      <a href="{% url 'staffRegistration'%}" class="btn btn-danger">Add Employee</a>
+                    </div>
+
+                    <!-- Showing Employee Search Result -->
+                    {% if employees %}
+                        <div class="table-responsive">
+                            <h2 class="mb-3">Employee Details</h2>
+                            <h4>Total Employee Record:{{employees|length}}</h4>
+                            <table class="table table-bordered table-striped table-hover align-middle text-center shadow-sm">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Father/Husband Name</th>
+                                        <th>Date of Birth</th>
+                                        <th>Gender</th>
+                                        <th>Designation</th>
+                                        <th>Email Id</th>
+                                        <th>Mobile Number</th>
+                                        <th>Address</th>
+                                        <th>Country</th>
+                                        <th>State</th>
+                                        <th>City</th>
+                                        <th>PinCode</th>
+                                        <th>Highest Qulification</th>
+                                        <th>Specialization</th>
+                                        <th>Passing Year</th>
+                                        <th>College/Univercity</th>
+                                        <th>Percentage/CGPA</th>
+                                        <th>Work Status</th>
+                                        <th>Company Name</th>
+                                        <th>Job Title</th>
+                                        <th>Total Experience</th>
+                                        <th>Notice Period</th>
+                                        <th>Salary</th>
+                                        <th>Salary Slip</th>
+                                        <th>Adhar</th>
+                                        <th>Pan</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                        <th>Update</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for rec in employees %}
+                                        <tr>
+                                            <!--  Personal Info -->
+                                            <td>{{rec.name}}</td>
+                                            <td>{{rec.f_h}}</td>
+                                            <td>{{rec.dob}}</td>
+                                            <td>{{rec.gender}}</td>
+
+                                            <!-- Designation / Role -->
+                                            <td>{{rec.role}}</td>
+
+                                            <!--Contact Details-->
+                                            <td>{{rec.email}}</td>
+                                            <td>{{rec.mobile}}</td>
+                                            <td>{{rec.address}}</td>
+                                            <!--  Location Data -->
+                                            <td>{{rec.country}}</td>
+                                            <td>{{rec.state}}</td>
+                                            <td>{{rec.city}}</td>
+                                            <td>{{rec.pincode}}</td>
+
+                                            <!--Educational Details-->
+                                            <td>{{rec.highest_qualification}}</td>
+                                            <td>{{rec.specialization}}</td>
+                                            <td>{{rec.passing_year}}</td>
+                                            <td>{{rec.college}}</td>
+                                            <td>{{rec.percentage}}</td>
+
+                                            <!-- Professional Details-->
+                                             <td>{{rec.work_status}}</td>
+                                             <td>{{rec.company_name}}</td>
+                                             <td>{{rec.job_title}}</td>
+                                             <td>{{rec.total_experience}}</td>
+                                             <td>{{rec.notice_period}}</td>
+                                             <td>{{rec.salary}}</td>
+                                             <!-- Salary Slip -->
+                                             <td>
+                                              {% if rec.salary_slip %}
+                                                <img src="{{rec.salary_slip.url}}" width="80" class="img-thumbnail" rounded alt="Salary Slip">
+                                              {% else %}
+                                                <span class="text-muted">No Salary Slip </span>
+                                              {% endif %}
+                                             </td>
+                                            <!-- Adhar Image -->
+                                            <td>
+                                              {% if rec.adhar %}
+                                              <img src="{{rec.adhar.url}}" width="80" class="img-thumbnail" rounded alt="Aadhar Card">
+                                              {% else %}
+                                                <span class="text-muted">No Adhar Found</span>
+                                              {% endif %}
+                                            </td>
+                                            <!-- PAN IMAGE-->
+                                            <td>
+                                              {% if rec.pan %}
+                                                <img src="{{rec.pan.url}}" width="80" class="img-thumbnail" rounded alt="PAN Card">
+                                              {% else %}
+                                                  <span class="text-muted">No Pan Found</span>
+                                              {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if rec.is_active %}
+                                                    <span class="badge bg-success">Active</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">Inactive</span>
+                                                {% endif %}
+                                            </td>
+                                            <!-- Toggle the employee between Activate and Deactivate -->
+                                            <td>
+                                                <a href="{% url 'toggleEmployee' rec.id %}" class="btn btn-sm {% if rec.is_active %}btn-danger{% else %}btn-success{% endif %}">
+                                                    {% if rec.is_active %}Deactivate{% else %}Activate{% endif %}
+                                                </a>
+                                            </td>
+                                            <!-- Updating the data-->
+                                            <td>
+                                                <a href="{% url 'employee_update' rec.id%}" class="btn btn-warning btn-sm">
+                                                    <i class="fa-solid fa-user-pen"></i>
+                                                </a>
+                                            </td>
+                                            
+                                            <!--Deleting Data -->
+                                            <td>
+                                                <a href="{% url 'employee_delete' rec.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete ?');">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>  
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning text-center mt-4">
+                            No Employee Record Found.
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        <!-- COURSE SECTION ================================================ -->
+         <div class="accordion-item border-0">
+            <h2 class="accordion-header d-none" id="headingCourse"></h2>
+            <div id="panel_course" class="accordion-collapse collapse {% if request.GET.open == 'courses' %}show{% endif %} " data-bs-parent="#adminAccordion">
+                <div class="accordion-body p-0">
+
+                    <!-- Add Course Form -->
+                     <div class="card p-4 mb-4">
+                        <h5 class="mb-3">Add New Course</h5>
+                        <form method="POST" action="{% url 'createCourse' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="add-course" name="course" placeholder="Enter Course Here" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Add Course</button>
+                        </form>
+                     </div>
+
+                     <!-- Course Table -->
+                      <div id="courseTableContainer" class="card p-4 mt-4">
+                        <h5 class="mb-3">Create Table</h5>
+                        <p class="text-muted">Total Records:{{courses|length}}</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Courses</th>
+                                        <th scope="col">Update</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for rec in courses %}
+                                        <tr>
+                                            <td>{{ rec.course }}</td>
+                                            <td class="text-center">
+
+                                                <!-- Edit in-row collapse-->
+                                                <button class="btn btn-warning btn-sm" data-bs-toggle="collapse" data-bs-target="#updateCourseForm{{rec.id}}">
+                                                <i class="fa-solid fa-user-pen"></i></button>
+                                            </td>
+                                            <td class="text-center">
+                                                 <a href="{% url 'deleteCourse' rec.id %}" class="btn btn-danger btn-sm" 
+                                                            onclick="return confirm('Are you sure you want to delete?');">
+                                                <i class="fa-solid fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Hidden Update Form Row -->
+                                        <tr class="collapse" id="updateCourseForm{{rec.id}}">
+                                           <td colspan="3">
+                                               <form method="POST" action="{% url 'updateCourse' rec.id %}">
+                                                   {% csrf_token %}
+                                                   <div class="input-group">
+                                                       <input type="text" class="form-control" name="course" value="{{rec.course}}">
+                                                       <button type="submit" class="btn btn-success">Update</button>
+                                                   </div>
+                                               </form>
+                                           </td>
+                                        </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="2" class="text-center">No Records Available</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                      </div>  
+                </div>
+            </div>
+         </div>
+
+        
+        {% comment %} <!-- STUDENT ENQUIRY TABLE SECTION-->
+        <div class="accordion-item border-0">
+            <h2 class="accordion-header d-none" id="headingEnquiryTable"></h2>
+            <div id="panel_studentEnquiryTable" class="accordion-collapse collapse {% if request.GET.show_enquiry %}show{% endif %}" data-bs-parent="#adminAccordion">
+                <div class="accordion-body p-0">  
+
+                    <!-- Search Bar for Searching Employee -->
+                    <nav class="navbar bg-body-tertiary">
+                      <div class="container-fluid">
+                        <form method='get' action="{% url 'searchEnquiry' %}" class="d-flex" role = "search" >
+                          <input type="search" name="query" placeholder='Search by username, email or city' aria-label = "Search"  id="search_bar" class="form-control me-2" value="{{ request.GET.q }}">
+                          <input type="hidden" name="show_enquiry" value="1">
+                          <button type="submit" id="search_btn" class="btn btn-outline-success">Search Student</button>
+                        </form>
+                      </div>    
+                    </nav>
+
+                    <!-- Add Enquiry Button -->
+                    <div class="text-end mb-2">
+                      <a href="{% url 'enquiryForm'%}" class="btn btn-danger">Add Student Enquiry</a>
+                    </div>
+                    
+                    {% if enquiry_data %}
+                        <div class="table-responsive">
+                            <h2 class="mb-3">Student Enquiry Details</h2>
+                            <h4>Total Enquiry Record:{{enquiry_data|length}}</h4>
+                            <table class="table table-bordered table-striped table-hover align-middle text-center shadow-sm">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <!-- Personal Details -->
+                                        <th>Name</th>
+                                        <th>Father/Husband Name</th>
+                                        <th>Date of Birth</th>
+                                        <th>Gender</th>
+
+                                        <!-- course Name -->
+                                        <th>Intrested Course</th>
+
+                                        <!-- Contact Details -->
+                                        <th>Email Id</th>
+                                        <th>Mobile Number</th>
+                                        <th>Address</th>
+                                        <th>Country</th>
+                                        <th>State</th>
+                                        <th>City</th>
+                                        <th>PinCode</th>
+
+                                        <!-- Educational Details-->
+                                        <th>Highest Qulification</th>
+                                        <th>School Name</th>
+                                        <th>course_name</th>
+                                        <th>College/University</th>
+                                        <th>Branch Name</th>
+                                        <th>Passing Year</th>
+                                        <th>Percentage/CGPA</th>
+
+                                        <!-- Professional Details-->
+                                        <th>Work Status</th>
+                                        <th>Company Name</th>
+                                        <th>Job Title</th>
+                                        <th>Total Experience</th>
+                                        <th>Notice Period</th>
+                                        <th>Salary</th>
+
+                                        <!-- Documents Upload -->
+                                        <th>Salary Slip</th>
+                                        <th>Adhar</th>
+                                        
+                                        <!-- Directors Meeting-->
+                                        <th>Meeting Status</th>
+
+                                        <!-- Actions -->
+                                        <th>Action</th>
+
+                                        <th>Update</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for rec in enquiry_data %}
+                                        <tr>
+                                            <!--  Personal Info -->
+                                            <td>{{rec.name}}</td>
+                                            <td>{{rec.f_h}}</td>
+                                            <td>{{rec.dob}}</td>
+                                            <td>{{rec.gender}}</td>
+
+                                            <!-- Designation / Role -->
+                                            <td>{{rec.course}}</td>
+
+                                            <!--Contact Details-->
+                                            <td>{{rec.email}}</td>
+                                            <td>{{rec.mobile}}</td>
+
+                                            <!--  Location Data -->
+                                            <td>{{rec.address}}</td>
+                                            <td>{{rec.country}}</td>
+                                            <td>{{rec.state}}</td>
+                                            <td>{{rec.city}}</td>
+                                            <td>{{rec.pincode}}</td>
+
+                                            <!--Educational Details-->
+                                            <td>{{rec.highest_qualification}}</td>
+                                            <td>{{rec.school_name}}</td>
+                                            <td>{{rec.course_name}}</td>
+                                            <td>{{rec.college_name}}</td>
+                                            <td>{{rec.branch_name}}</td>
+                                            <td>{{rec.passing_year}}</td>
+                                            <td>{{rec.percentage}}</td>
+
+                                            <!-- Professional Details-->
+                                            <td>{{rec.work_status}}</td>
+                                            <td>{{rec.company_name}}</td>
+                                            <td>{{rec.job_title}}</td>
+                                            <td>{{rec.total_experience}}</td>
+                                            <td>{{rec.notice_period}}</td>
+                                            <td>{{rec.salary}}</td>
+
+                                             <!-- Salary Slip -->
+                                            <td>
+                                             {% if rec.salary_slip %}
+                                               <img src="{{rec.salary_slip.url}}" width="80px" height="80px" class="img-thumbnail" rounded alt="Salary Slip">
+                                             {% else %}
+                                               <span class="text-muted">No Salary Slip </span>
+                                             {% endif %}
+                                            </td>
+                                            
+                                            <!-- Adhar Image -->
+                                            <td>
+                                              {% if rec.adhar %}
+                                              <img src="{{rec.adhar.url}}" width="80" height="60"  rounded alt="Aadhar Card">
+                                              {% else %}
+                                                <span class="text-muted">No Adhar Found</span>
+                                              {% endif %}
+                                            </td>
+
+                                            <!--meeting Status -->
+                                            <td>
+                                                {% if rec.directors_meeting %}
+                                                    <span class="badge bg-success">Yes</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">No</span>
+                                                {% endif %}
+                                            </td>
+
+                                            <td>
+                                                <a href="{% url 'toggleEnquiryStatus' rec.id %}" class="btn btn-sm {% if rec.directors_meeting %}btn-danger{% else %}btn-success{% endif %}">
+                                                    {% if rec.directors_meeting %}Deactivate{% else %}Activate{% endif %}
+                                                </a>
+                                            </td>
+
+                                            <!-- Updating the data-->
+                                            <td>
+                                                <a href="{% url 'employee_update' rec.id%}" class="btn btn-warning btn-sm">
+                                                    <i class="fa-solid fa-user-pen"></i>
+                                                </a>
+                                            </td>
+                                            
+                                            <!--Deleting Data -->
+                                            <td>
+                                                <a href="{% url 'employee_delete' rec.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete ?');">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </a>
+                                            </td>
+
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>  
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning text-center mt-4">
+                            No Enquiry Record Found.
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div> {% endcomment %}
+
+        <!-- ================= RECENT STUDENT ENQUIRY PANEL ================= -->
+        <div class="accordion-item border-0">
+        
+            <!-- hidden header (REQUIRED) -->
+            <h2 class="accordion-header d-none" id="headingRecentStudentEnquiry">
+                <button class="accordion-button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#panel_recent_student_Enquiry_table">
+                </button>
+            </h2>
+        
+            <div id="panel_recent_student_Enquiry_table"
+                 class="accordion-collapse collapse"
+                 data-bs-parent="#adminAccordion">
+        
+                <div class="accordion-body p-0">
+                    <div class="mt-4" style="margin-left:280px;">
+                        {% include "shared/admin_student_recent_enquiry.html" with data=recent_enquiry_data %}
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+
+
+
+
+        <!-- ================= STUDENT ENQUIRY PANEL ================= -->
+        <div class="accordion-item border-0">
+        
+            <!-- hidden header (REQUIRED) -->
+            <h2 class="accordion-header d-none" id="headingStudentEnquiry">
+                <button class="accordion-button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#panel_studentEnquiryTable">
+                </button>
+            </h2>
+        
+            <div id="panel_studentEnquiryTable"
+                 class="accordion-collapse collapse"
+                 data-bs-parent="#adminAccordion">
+        
+                <div class="accordion-body p-0">
+                    <div class="mt-4" style="margin-left:280px;">
+                        {% include "shared/admin_student_enquiry_table.html" with data=student_enquiry_data %}
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+
+
+</div><!-- /content-area -->
+{% endblock %}
+
+

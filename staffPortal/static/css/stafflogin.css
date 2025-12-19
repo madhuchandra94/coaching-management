@@ -1,0 +1,36 @@
+body
+    {
+        background-color: #F5F5F5;
+    }
+    #main_div 
+    {
+        position: relative;
+        top: 80px;
+        left: 450px;
+        height: 400px;
+        width: 400px;
+        background-color: #4980c876;
+        border: solid;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #0ff, 0 0 20px rgba(131, 242, 242, 1);
+    }
+    input
+    {
+        margin-top: 10px;
+        margin-left: 20px;
+    }
+    label
+    {
+        margin-top:35px;
+        margin-left:20px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 20px;
+        font-weight: 400;
+    }
+    #sbtn
+    {   
+        position: relative;
+        top: 40px;
+        left: 150px;
+        
+    }

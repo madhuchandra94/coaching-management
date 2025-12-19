@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %} Base Page {% endblock %}</title>
+        {% load static %}
+
+        <!-- Linking Bootstrap Css -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+        
+        <!-- Linking Bootstrap Js -->
+         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+        
+        <!-- Linking FontAwesome CDN --> 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/> 
+        <!-- Linking Css --> 
+        {% block css %} <link rel="stylesheet" href="{% static "css/basestyles.css" %}"/> {% endblock %}
+        
+        <!-- Linking JS-->
+        {% block js %} <script src = "{% static 'js/base_script.js'%}"></script> {% endblock %}
+        {% block extra_css %}{% endblock %}
+        {% block extra_js %} {% endblock %}
+</head>
+<body>
+    {% block navbar %}
+
+    {% endblock %}
+    
+    {% block heading %} 
+        <h3 class="text-center mt-3">Programmers Point Solution</h3>
+        <div class="container mt-4 text-center">
+        <img src="{% static 'images/programmers-logo.png' %}" alt="logo" class="img-fluid mb-3" style="max-width:150px;"></div>
+    {% endblock heading %}
+    
+    {% block logo %}{% endblock %}
+    
+    {% block container %}{% endblock %}
+
+    {% block footer %}<footer><div id="footer"><small> This site register & copyright &copy; PPSolutions </small></div></footer>{% endblock %}
+</body>
+</html>

@@ -1,0 +1,330 @@
+{% extends "staffPortal/base.html" %}
+{% load static %}
+
+{% block title %} Staff Registration Page {% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registration.css'%}">
+{% endblock %}
+
+<!-- Linking  Extra JS-->
+ {% block js %}
+    <script src="{% static 'js/registration_script.js'%}"></script>
+ {% endblock js %}
+
+{% block heading %}
+{% endblock heading %}
+
+{% block container %}
+<div class="outer-wrap">
+<!-- Main Container Div -->
+    
+    <!--Showing Error and Success Messages -->
+    {% if messages %}
+      <div class="container mt-3 md-2">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm rounded-3" 
+            role="alert"
+            style="font-size: 16px; padding: 12px 20px;">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Showing Logo and Heading -->
+    <div class="pro-logo-pill">
+      <div class="pro-logo-pill-inner">
+          <img src="{% static 'images/programmers-logo.png' %}" alt="Logo">
+          <div class="pro-logo-title">Staff Registration Page</div>
+      </div>
+    </div>
+
+    <!-- Sub Container-->
+    <div class="card main-card shadow">
+          <div class="card-body px-lg-5 px-2 pb-5 pt-1">
+
+            <!-- Form Section -->
+            {% if staff %}
+              <form method="POST" enctype="multipart/form-data"  action="{% url 'employee_update' staff.id %}">
+            {% else %}
+              <form id="regForm" method="post" enctype="multipart/form-data" action="{% url 'staffRegistration'%}">
+            {% endif %}
+              {% csrf_token %}
+
+              <!-- Personal Details -->
+              <div class="section-title-bar"><i class="fas fa-user"></i> Personal Details</div>
+              <div class="row mb-1 gx-4 gy-4">
+
+                <!-- Name section-->
+                <div class="col-md-6">
+                  <label class="form-label">Full Name *</label>
+                  <input type="text" class="form-control" name="name" value='{% if staff %}{{ staff.name }}{% endif %}' required>
+                </div>
+
+                <!-- Father Name section-->
+                <div class="col-md-6">
+                  <label class="form-label">Father/Husband Name</label>
+                  <input type="text" class="form-control" name="f_h" value='{% if staff %}{{ staff.f_h }}{% endif %}'>
+                </div>
+
+                <!-- Date of Birth section-->
+                <div class="col-md-6">
+                  <label class="form-label">Date of Birth</label>
+                  <input type="date" class="form-control" name="dob" value="{% if staff %}{{ staff.dob|date:'Y-m-d' }}{% endif %}">
+                </div>
+
+                <!-- Gender section-->
+                <div class="col-md-6">
+                  <label class="form-label">Gender</label>
+                  <div class="d-flex gap-4 mt-2">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="gender" id="male" value="male" {% if staff and staff.gender == "male" %}checked{% endif %} >
+                      <label class="form-check-label" for="male">Male</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="gender" id="female" value="female" {% if staff and staff.gender == "female" %}checked{% endif %}>
+                      <label class="form-check-label" for="female">Female</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="gender" id="other" value="other" {% if staff.gender == "other"%}checked{% endif %}>
+                      <label class="form-check-label" for="other">Other</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Account Security  -->
+
+            <div class="section-title-bar">
+              <i class="fas fa-user-lock"></i> Account Security</div>
+            <div class="row mb-1 gx-4 gy-4">
+              <div class="col-md-6">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Type Your Password" value="{{staff.password}}" required>
+              </div>
+              <div class="col-md-6">
+                <label for="confirm_Password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="con_password" id="confirm_Password" placeholder="Confirm Your Password" value="{{con_password}}" required>
+              </div>
+              <div class="col-12">
+                <div class="form-text" id="passwordHelpBlock">
+                  Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+                </div>
+              </div>
+            </div>
+
+
+
+              <!-- Designation Section -->
+              <div class="section-title-bar"><i class="fas fa-award"></i> Designation</div>
+              <div class="row gx-4">
+                <div class="col-md-6 mb-2">
+                  <label class="form-label">Job Title</label>
+                  <select name="role" class="form-select">
+                    <option value="">Select Designation</option>
+                    {% for r in role %}
+                      <option value="{{r.id}}" {% if staff and staff.role.id == r.id %}selected{% endif %}>{{r.role}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <!-- Contact Details section-->
+              <div class="section-title-bar"><i class="fas fa-address-book"></i> Contact Details</div>
+              <div class="row gx-4 gy-4">
+
+                <!-- Email section-->
+                <div class="col-md-6">
+                  <label class="form-label">Email *</label>
+                  <input type="email" class="form-control" name="email" value="{% if staff %}{{ staff.email }}{% endif %}" required>
+                </div>
+
+                <!-- Mobile Number section-->
+                <div class="col-md-6">
+                  <label class="form-label">Mobile Number</label>
+                  <input type="tel" class="form-control" name="mobile" maxlength="10" value="{% if staff %}{{ staff.mobile }}{% endif %}">
+                </div>
+
+                <!-- Address section-->
+                <div class="col-12">
+                  <label class="form-label">Address</label>
+                  <textarea class="form-control" name="address" rows="2">{% if staff %}{{ staff.address }}{% endif %}</textarea>
+                </div>
+
+                <!-- Country section-->
+                <div class="col-md-4">
+                  <label class="form-label">Country</label>
+                  <select name="country" class="form-select">
+                    <option value="">Select Country</option>
+                    {% for country_item in country %}
+                      <option value="{{country_item.id}}" {% if staff and staff.country.id == country_item.id %}selected{% endif %}>{{country_item.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <!-- State section-->
+                <div class="col-md-4">
+                  <label class="form-label">State</label>
+                  <select name="state" class="form-select">
+                    <option value="">Select State</option>
+                    {% for state_item in state %}
+                      <option value="{{state_item.id}}" {% if staff and staff.state.id == state_item.id %}selected{% endif %}>{{state_item.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <!-- City section-->
+                <div class="col-md-4">
+                  <label class="form-label">City</label>
+                  <select name="city" class="form-select">
+                    <option value="">Select City</option>
+                    {% for city_item in city %}
+                      <option value="{{city_item.id}}" {% if staff and staff.city.id == city_item.id %}selected{% endif %}>{{city_item.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <!-- Pincode section-->
+                <div class="col-md-4">
+                  <label class="form-label">Pincode</label>
+                  <input type="number" class="form-control" name="pincode" maxlength="6" value="{{staff.pincode}}">
+                </div>
+              </div>
+
+              <!-- Educational Details section-->
+              <div class="section-title-bar"><i class="fas fa-graduation-cap"></i> Educational Details</div>
+              <div class="row gx-4 gy-4">
+
+                <!-- Highest Qualification section-->
+                <div class="col-md-6">
+                  <label class="form-label">Highest Qualification</label>
+                  <input type="text" class="form-control" name="qualification" value="{{staff.highest_qualification}}">
+                </div>
+
+                <!-- Specialization section-->
+                <div class="col-md-6">
+                  <label class="form-label">Specialization</label>
+                  <input type="text" class="form-control" name="specialization" value="{{staff.specialization}}">
+                </div>
+
+                <!-- Passing Out section-->
+                <div class="col-md-4">
+                  <label class="form-label">Passing Year</label>
+                  <input type="number" min="1900" max="2099" class="form-control" name="passing_year" placeholder="e.g. 2022" value="{{staff.passing_year}}">
+                </div>
+
+                <!-- College section-->
+                <div class="col-md-4">
+                  <label class="form-label">College/Univercity Name</label>
+                  <input type="text" class="form-control" name="college_university" value="{{staff.college}}">
+                </div>
+
+                <!-- Percentage/CGPA section-->
+                <div class="col-md-4">
+                  <label class="form-label">Percentage/CGPA</label>
+                  <input type="text" class="form-control" name="percentage_cgpa" placeholder="e.g. 78% or 8.3 CGPA" value="{{staff.percentage}}" >
+                </div>
+              </div>
+
+              <!-- Professional Details section-->
+              <div class="section-title-bar"><i class="fas fa-briefcase"></i> Professional Details</div>
+
+              <!-- Work Status section-->
+              <div class="mb-3">
+                <label class="form-label">Work Status</label>
+                <div class="d-flex gap-5 mt-2">
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" name="work_status" id="fresher" value="fresher" onclick="show_exp(false)" checked>
+                    <label class="form-check-label" for="fresher" >Fresher</label></div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" name="work_status" id="experienced" value="experienced" onclick="show_exp(true)">
+                    <label class="form-check-label" for="experienced" >Experienced</label></div>
+                </div>
+              </div>
+              <!-- Experienced section-->
+              <div id="professional-section" class="step-hide">
+                <div class="row gx-4 gy-4">
+                  <div class="col-md-6">
+                    <label class="form-label">Company Name</label>
+                    <input type="text" class="form-control" name="Company_name" value="{{staff.company_name}}">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Job Title</label>
+                    <input type="text" class="form-control" name="Post_Name" value="{{staff.job_title}}">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Total Experience</label>
+                    <select class="form-select" name="Total_Experience">
+                      <option value="">Select Experience</option>
+                      <option value="<1">&lt; 1 Year</option>
+                      <option value="0-1">0-1 Year</option>
+                      <option value="1-2">1-2 Year</option>
+                      <option value="2-3">2-3 Year</option>
+                      <option value="3-4">3-4 Year</option>
+                      <option value="4-5">4-5 Year</option>
+                      <option value="<5">&lt; 5 Year</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Notice Period</label>
+                    <select class="form-select" name="Notice_period">
+                      <option value="">Select Notice Period</option>
+                      <option value="15days">15 days</option>
+                      <option value="15-30days">15-30 days</option>
+                      <option value="1-2months">1-2 months</option>
+                      <option value="2-3months">2-3 months</option>
+                      <option value=">3months">&gt; 3 months</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Salary</label>
+                    <input type="number" class="form-control" name="Salary" value="{{staff.salary}}">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Upload Salary Slip</label>
+                    <input type="file" class="form-control" name="salary_slip">{% if staff.salary_slip %} <p>Current:<a href="{{staff.salary_slip.url}}" target="_blank">view</a></p>{% endif %}
+                    <small class="form-text">Upload 3 month salary slip.</small></div>
+                </div>
+              </div>
+              <div class="section-title-bar"><i class="fas fa-file-upload"></i> Documents</div>
+              <div class="row gx-4 gy-4 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label">Upload Aadhaar</label>
+                  <input type="file" class="form-control" name="adhar_upload">{% if staff.adhar %}<p>Current: <a href="{{ staff.adhar.url }}" target="_blank">View</a></p>{% endif %}
+                  <small class="form-text">Upload your Aadhaar.</small>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Upload PAN</label>
+                  <input type="file" class="form-control" name="pan_upload">{% if staff.pan %}<p>Current: <a href="{{ staff.pan.url }}" target="_blank">View</a></p>{% endif %}
+                  <small class="form-text">Upload your PAN.</small>
+                </div>
+              </div>
+              <div class="form-check mb-4 mt-3 ps-2">
+                <input type="checkbox" class="form-check-input" id="agree" name="agree" value="1"  {% if staff and staff.agree %}checked{% endif %} required>
+                <label class="form-check-label" for="agree">
+                  Agree to the terms and conditions
+                </label>
+              </div>
+              <!-- Register amd Update button logic "LONG"-->
+              {% comment %} <div class="d-grid">
+                {% if staff %}
+                  <button type="submit" class="btn btn-warning" id="button">Update Employee</button>
+                {% else %}
+                  <button type="submit" class="btn btn-success">Register Employee</button>
+                {% endif %}
+              </button>
+              </div> {% endcomment %}
+              <!-- Register and Update button logic "Short" -->
+              <div class="d-grid">
+                <button type="submit" class="btn {% if staff %}btn-warning{% else %}btn-success{% endif %}" id="button">
+                      {% if staff %}Update Employee{% else %}Register Employee{% endif %}
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+</div>
+{% endblock %}

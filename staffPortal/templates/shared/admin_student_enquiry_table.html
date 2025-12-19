@@ -1,0 +1,114 @@
+<div class="card shadow mt-4 border-0">
+    <div class="card-header bg-danger text-white fw-bold">Student Enquiry Table</div>
+
+    <div class="card-body">
+        <div class="table-responsive" style="max-height:400px; overflow-y:auto; white-space:nowrap;">
+
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-danger">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Father's Name</th>
+                        <th>DOB</th>
+                        <th>Gender</th>
+                        <th>Email</th>
+                        <th>Number</th>
+                        <th>Country</th>
+                        <th>State</th>
+                        <th>City</th>
+                        <th>Address</th>
+                        <th>Pincode</th>
+                        <th>Education</th>
+                        <th>School</th>
+                        <th>University</th>
+                        <th>College</th>
+                        <th>Status</th>
+                        <th>Course</th>
+                        <th>Aadhar</th>
+                        <th>Pan</th>
+                        <th>Meeting</th>
+                        <th>Action</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for user in data %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.father_name }}</td>
+                        <td>{{ user.dob }}</td>
+                        <td>{{ user.gender }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.number }}</td>
+                        <td>{{ user.country }}</td>
+                        <td>{{ user.state }}</td>
+                        <td>{{ user.city }}</td>
+                        <td>{{ user.address }}</td>
+                        <td>{{ user.pincode }}</td>
+                        <td>{{ user.education }}</td>
+                        <td>{{ user.school }}</td>
+                        <td>{{ user.university }}</td>
+                        <td>{{ user.collage }}</td>
+                        <td>{{ user.status }}</td>
+                        <td>{{ user.course }}</td>
+
+                        <td>
+                        {% if user.aadhar %}
+                            <img src="{{ user.aadhar.url }}" width="60" height="60">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                        </td>
+
+                        <td>
+                        {% if user.pan %}
+                            <img src="{{ user.pan.url }}" width="60" height="60">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                        </td>
+
+                        <td class="text-center">
+                            {% if user.director_meeting %}
+                                <span class="badge bg-success">Yes</span>
+                            {% else %}
+                                <span class="badge bg-danger">No</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-center">
+                            {% if user.director_meeting %}
+                                <a href="{% url 'admin_deactivate_student_enquiry' user.id %}" class="btn btn-danger btn-sm">No</a>
+                            {% else %}
+                                <a href="{% url 'admin_activate_student_enquiry' user.id %}" class="btn btn-success btn-sm">Yes</a>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <a href="{% url 'admin_Delete_student_enquiry' user.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+<script>
+function toggleRemarkForm(id) {
+    const form = document.getElementById("remarkForm" + id);
+    if (!form) return;
+
+    if (form.style.display === "none" || form.style.display === "") {
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
+}
+</script>
