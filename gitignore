@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+
+# Environment
+.env
+venv/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+<!-- | Item        | Reason                          |
+| ----------- | ------------------------------- |
+| db.sqlite3  | Database should not be shared   |
+| media/      | Contains user files (sensitive) |
+| venv/       | Environment is local only       |
+| .env        | Contains secret keys            |
+| **pycache** | Auto-generated                  |
+ -->
